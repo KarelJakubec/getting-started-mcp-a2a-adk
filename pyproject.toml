@@ -1,5 +1,5 @@
 [project]
-name = "currency-agent-workspace"
+name = "getting-started-mcp-a2a-adk"
 version = "0.1.0"
 description = "Workspace for currency agent, travel agent, and currency MCP server"
 readme = "README.md"

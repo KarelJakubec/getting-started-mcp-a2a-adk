@@ -25,7 +25,7 @@ of MCP + A2A + ADK.
 
 The MCP server in this example exposes a tool `get_exchange_rate` that can be used to get the exchange rate between two currencies such as USD and EUR. It leverages the [Frankfurter](https://www.frankfurter.dev/) API to get the currency exchange rate. Our agent uses an MCP client to invoke this tool when needed.
 
-### <img height="20" width="20" src="https://a2a-protocol.org/v0.2.5/assets/a2a-logo-white.svg" alt="A2A Logo" /> Agent2Agent (A2A)
+### <img height="20" width="20" src="https://a2a-protocol.org/v0.2.5/assets/a2a-logo-black.svg" alt="A2A Logo" /> Agent2Agent (A2A)
 
 > Agent2Agent (A2A) protocol addresses a critical challenge in the AI landscape: enabling gen AI agents, built on diverse frameworks by different companies running on separate servers, to communicate and collaborate effectively - as agents, not just as tools. A2A aims to provide a common language for agents, fostering a more interconnected, powerful, and innovative AI ecosystem. - [A2A](https://github.com/a2aproject/A2A)
 
@@ -111,8 +111,8 @@ Project dependencies are organized as a unified **`uv` Workspace**:
 
 1. Clone repository:
    ```bash
-   git clone https://github.com/meteatamel/currency-agent.git
-   cd currency-agent
+   git clone https://github.com/meteatamel/getting-started-mcp-a2a-adk.git
+   cd getting-started-mcp-a2a-adk
    ```
 
 2. Install all dependencies across the workspace:
@@ -123,13 +123,13 @@ Project dependencies are organized as a unified **`uv` Workspace**:
 3. Configure Environment Variables:
    Create a `.env` file in the project root.
 
-   **Option A: Google AI Studio (Recommended for quick testing)**
+   **Option A: Google AI Studio**
    ```sh
    GOOGLE_API_KEY=<your_api_key_here>
    GOOGLE_GENAI_USE_ENTERPRISE=FALSE
    ```
 
-   **Option B: Gemini Enterprise / Vertex AI (Google Cloud)**
+   **Option B: Gemini Enterprise (Google Cloud)**
    ```sh
    GOOGLE_GENAI_USE_ENTERPRISE=TRUE
    GOOGLE_CLOUD_PROJECT=<your_gcp_project_id>
@@ -140,40 +140,63 @@ Project dependencies are organized as a unified **`uv` Workspace**:
 
 ## 💻 Local Execution
 
-You can run all three services concurrently in separate terminal windows:
+You can run all three services concurrently in separate terminal windows. Make
+sure to run them in the order of MCP server first, then currency agent, then
+travel agent.
 
-### Terminal 1: Currency MCP Server (Port 8080)
+### Step 1: Start Currency MCP Server
+
+Start MCP server locally in terminal1:
+
 ```bash
 uv run python currency_mcp_server/server.py
 ```
-*Test the MCP server:*
+
+### Step 2: Start Currency Agent
+
+Start agent locally in terminal2:
+
+```bash
+uv run python currency_agent/agent.py
+```
+
+### Step 3: Start Travel Agent
+
+Start agent locally in terminal3:
+
+```bash
+uv run python travel_agent/agent.py
+```
+
+### 🧪 Testing
+
+Test the MCP server:
+
 ```bash
 uv run python currency_mcp_server/test_server.py
 ```
 
-### Terminal 2: Currency Agent (Port 8081)
-```bash
-uv run python currency_agent/agent.py
-```
-*Test Currency Agent via A2A client:*
+Test the currency agent:
+
 ```bash
 uv run python currency_agent/test_a2aclient.py
 ```
 
-### Terminal 3: Travel Agent (Port 8082)
-```bash
-uv run python travel_agent/agent.py
-```
-*Test Travel Agent via A2A client:*
+Test the travel agent:
+
 ```bash
 uv run python travel_agent/test_a2aclient.py
 ```
+
 This test runs end-to-end:
 1. Queries travel and currency conversion (delegated via A2A to `currency_agent` -> `currency_mcp_server`).
 2. Queries weather forecasts (delegated to local `weather_agent` in `travel_agent/subagents/`).
 
-### ADK Web UI
+
+### 🧪 Testing with ADK Web UI
+
 To explore and chat with the agents using the interactive ADK visual interface:
+
 ```bash
 uv run adk web
 ```
@@ -185,17 +208,24 @@ Open your browser at `http://localhost:8000` to interact with `currency_agent` a
 
 All three components include optimized Dockerfiles and can be deployed directly from source to Cloud Run. You can use `gcloud` to automatically capture service URLs and wire them into the next steps without manual copy-pasting.
 
+First, set some environment variables for your Google Cloud project and Cloud Run region:
+
+```bash
+export PROJECT_ID=<YOUR_GOOGLE_CLOUD_PROJECT_ID>
+export REGION=us-central1
+```
+
 ### Step 1: Deploy Currency MCP Server
 
 ```bash
 # Deploy MCP server
 gcloud run deploy currency-mcp-server \
   --source currency_mcp_server \
-  --region us-central1 \
+  --region $REGION \
   --allow-unauthenticated
 
 # Capture the deployed MCP server URL
-MCP_SERVER_URL=$(gcloud run services describe currency-mcp-server --region us-central1 --format='value(status.url)')/mcp
+MCP_SERVER_URL=$(gcloud run services describe currency-mcp-server --region $REGION --format='value(status.url)')/mcp
 echo "MCP Server URL: $MCP_SERVER_URL"
 ```
 
@@ -207,20 +237,19 @@ Since `currency-agent`'s public URL is only generated upon its first deployment,
 # 1. Deploy Currency Agent with the MCP Server URL
 gcloud run deploy currency-agent \
   --source currency_agent \
-  --region us-central1 \
+  --region $REGION \
   --allow-unauthenticated \
-  --set-env-vars MCP_SERVER_URL="$MCP_SERVER_URL"
+  --update-env-vars MCP_SERVER_URL="$MCP_SERVER_URL",GOOGLE_GENAI_USE_ENTERPRISE="true",GOOGLE_CLOUD_PROJECT="$PROJECT_ID",GOOGLE_CLOUD_LOCATION="global"
 
 # 2. Capture its assigned Cloud Run URL
-CURRENCY_AGENT_URL=$(gcloud run services describe currency-agent --region us-central1 --format='value(status.url)')
+CURRENCY_AGENT_URL=$(gcloud run services describe currency-agent --region $REGION --format='value(status.url)')
 echo "Currency Agent URL: $CURRENCY_AGENT_URL"
 
 # 3. Update AGENT_URL so the agent advertises its public HTTPS endpoint in its Agent Card
 gcloud run services update currency-agent \
-  --region us-central1 \
+  --region $REGION \
   --update-env-vars AGENT_URL="$CURRENCY_AGENT_URL"
 ```
-*(If using Google AI Studio API key, add `,GOOGLE_API_KEY=<KEY>` to `--set-env-vars` or use Secret Manager).*
 
 ### Step 3: Deploy Travel Agent
 
@@ -230,21 +259,36 @@ Deploy `travel-agent` connected to `CURRENCY_AGENT_URL`, then set its own `AGENT
 # 1. Deploy Travel Agent connected to Currency Agent
 gcloud run deploy travel-agent \
   --source travel_agent \
-  --region us-central1 \
+  --region $REGION \
   --allow-unauthenticated \
-  --set-env-vars CURRENCY_AGENT_URL="$CURRENCY_AGENT_URL"
+  --update-env-vars CURRENCY_AGENT_URL="$CURRENCY_AGENT_URL",GOOGLE_GENAI_USE_ENTERPRISE="true",GOOGLE_CLOUD_PROJECT="$PROJECT_ID",GOOGLE_CLOUD_LOCATION="global"
 
 # 2. Capture its assigned Cloud Run URL
-TRAVEL_AGENT_URL=$(gcloud run services describe travel-agent --region us-central1 --format='value(status.url)')
+TRAVEL_AGENT_URL=$(gcloud run services describe travel-agent --region $REGION --format='value(status.url)')
 echo "Travel Agent URL: $TRAVEL_AGENT_URL"
 
 # 3. Update AGENT_URL so Travel Agent advertises its public HTTPS endpoint in its Agent Card
 gcloud run services update travel-agent \
-  --region us-central1 \
+  --region $REGION \
   --update-env-vars AGENT_URL="$TRAVEL_AGENT_URL"
 ```
 
-You can now test the fully deployed Travel Agent on Cloud Run directly from your local terminal over A2A:
+### 🧪 Testing
+
+Test the MCP server:
+
+```bash
+MCP_SERVER_URL="$MCP_SERVER_URL" uv run python currency_mcp_server/test_server.py
+```
+
+Test the currency agent:
+
+```bash
+AGENT_URL="$CURRENCY_AGENT_URL" uv run python currency_agent/test_a2aclient.py
+```
+
+Test the travel agent:
+
 ```bash
 AGENT_URL="$TRAVEL_AGENT_URL" uv run python travel_agent/test_a2aclient.py
 ```
