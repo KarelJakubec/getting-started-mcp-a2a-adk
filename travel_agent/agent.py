@@ -1,10 +1,7 @@
 import logging
 import os
-from urllib.parse import urlparse
-
 from dotenv import load_dotenv
 from google.adk.agents import LlmAgent
-from google.adk.a2a.utils.agent_to_a2a import to_a2a
 from google.adk.tools.agent_tool import AgentTool
 from google.adk.agents.remote_a2a_agent import RemoteA2aAgent, AGENT_CARD_WELL_KNOWN_PATH
 
@@ -53,24 +50,11 @@ root_agent = LlmAgent(
     ],
 )
 
-# Make the agent A2A-compatible
-PORT = int(os.getenv("PORT", 8082))
-AGENT_URL = os.getenv("AGENT_URL")
-
-if AGENT_URL:
-    parsed = urlparse(AGENT_URL)
-    protocol = parsed.scheme or "https"
-    host = parsed.hostname
-    port = parsed.port or 443
-else:
-    protocol = "http"
-    host = "localhost"
-    port = PORT
-
-a2a_app = to_a2a(root_agent, host=host, port=port, protocol=protocol)
-
 if __name__ == "__main__":
     import uvicorn
+    from google.adk.cli.fast_api import get_fast_api_app
 
-    logger.info(f"🚀 Starting travel_agent on port {PORT}")
-    uvicorn.run(a2a_app, host="0.0.0.0", port=PORT)
+    PORT = int(os.getenv("PORT", 8082))
+    logger.info(f"🚀 Starting travel_agent Web UI on port {PORT}")
+    app = get_fast_api_app(web=True, agents_dir=os.path.dirname(__file__) or ".")
+    uvicorn.run(app, host="0.0.0.0", port=PORT)

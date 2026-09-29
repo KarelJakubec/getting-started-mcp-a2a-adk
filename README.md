@@ -29,31 +29,28 @@ The MCP server in this example exposes a tool `get_exchange_rate` that can be us
 
 > Agent2Agent (A2A) protocol addresses a critical challenge in the AI landscape: enabling gen AI agents, built on diverse frameworks by different companies running on separate servers, to communicate and collaborate effectively - as agents, not just as tools. A2A aims to provide a common language for agents, fostering a more interconnected, powerful, and innovative AI ecosystem. - [A2A](https://github.com/a2aproject/A2A)
 
-In this sample, ADK is used to expose agents as A2A servers and also consume them
-as remote A2A agents. 
+In this sample, ADK is used to expose `currency_agent` as an A2A server (`to_a2a`) and consume it from `travel_agent` as a remote A2A agent (`RemoteA2aAgent`).
 
 ### <img height="20" width="20" src="images/adk-favicon.ico" alt="ADK Logo" /> Agent Development Kit (ADK)
 
 > ADK is a flexible and modular framework for developing and deploying AI agents. While optimized for Gemini and the Google ecosystem, ADK is model-agnostic, deployment-agnostic, and is built for compatibility with other frameworks. - [ADK](https://github.com/google/adk-python)
 
-ADK is used as the orchestration framework for creating our agents in this sample. It handles the conversation with the user and invokes our MCP tool when needed and handles the
-A2A communication for our agents.
+ADK is used as the orchestration framework for creating our agents in this sample. It handles the conversation with the user, serves the Web UI, invokes our MCP tool when needed, and handles the A2A communication.
 
 ## 🏗️ Architecture Overview
 
-The system consists of 2 agents talking to each other via A2A, 1 local agent,
-and 1 MCP server:
+The system consists of 1 orchestrating agent with Web UI, 1 remote agent via A2A, 1 local agent tool, and 1 MCP server:
 
 ```
 +-----------------------------------------------------------------------------------+
 |                                  Clients                                          |
-|                ADK Web UI  |  A2A Test Clients  |  HTTP Callers                   |
+|                     ADK Web UI (Browser)  |  HTTP Callers                         |
 +------------------------------------------+----------------------------------------+
-                                           | (A2A Protocol / JSON-RPC)
+                                           | (HTTP / Web UI)
                                            v
 +-----------------------------------------------------------------------------------+
 | travel_agent (Port 8082 / Cloud Run)                                              |
-| - Orchestrating ADK Agent exposed via A2A (to_a2a)                                |
+| - Orchestrating ADK Agent serving the ADK Web UI                                  |
 |                                                                                   |
 |   +--> [Local AgentTool] weather_agent (travel_agent/subagents/weather_agent.py)  |
 |        - Directly wrapped as AgentTool (no A2A network overhead)                  |
@@ -80,7 +77,7 @@ and 1 MCP server:
 
 - **`currency_mcp_server/`**: A FastMCP server exposing the `get_exchange_rate` tool over Streamable HTTP (`/mcp`), backed by the public [Frankfurter API](https://api.frankfurter.dev/).
 - **`currency_agent/`**: An ADK agent connected to the MCP server. Exposed as an A2A service (`to_a2a`).
-- **`travel_agent/`**: A travel assistant ADK agent exposed as an A2A service (`to_a2a`). It coordinates between:
+- **`travel_agent/`**: A travel assistant ADK agent serving the ADK Web UI. It coordinates between:
   - **`weather_agent`** (in `travel_agent/subagents/`): A **local agent wrapped as an `AgentTool`**, demonstrating in-process agent tool usage without A2A network hops.
   - **`currency_agent`**: A **remote agent wrapped as an `AgentTool`**, delegating requests over the A2A protocol.
 
@@ -162,11 +159,13 @@ uv run python currency_agent/agent.py
 
 ### Step 3: Start Travel Agent
 
-Start agent locally in terminal3:
+Start travel agent locally in terminal3 (starts the ADK Web UI on port 8082):
 
 ```bash
 uv run python travel_agent/agent.py
 ```
+
+*(Alternatively, you can run `uv run adk web travel_agent` to launch it on port 8000).*
 
 ### 🧪 Testing
 
@@ -176,31 +175,26 @@ Test the MCP server:
 uv run python currency_mcp_server/test_server.py
 ```
 
-Test the currency agent:
+Test the currency agent (over A2A protocol):
 
 ```bash
 uv run python currency_agent/test_a2aclient.py
 ```
 
-Test the travel agent:
+Test the travel agent (Interactive ADK Web UI):
 
-```bash
-uv run python travel_agent/test_a2aclient.py
-```
+Open your browser at `http://localhost:8082` (or `http://localhost:8000` if using `adk web`) and chat with `travel_agent`:
+> *"I'm planning a trip to London. What is the weather like and how much is 200 EUR in GBP?"*
 
-This test runs end-to-end:
+This runs end-to-end:
 1. Queries travel and currency conversion (delegated via A2A to `currency_agent` -> `currency_mcp_server`).
 2. Queries weather forecasts (delegated to local `weather_agent` in `travel_agent/subagents/`).
 
-
-### 🧪 Testing with ADK Web UI
-
-To explore and chat with the agents using the interactive ADK visual interface:
+You can also test queries directly from the command line:
 
 ```bash
-uv run adk web
+uv run adk run travel_agent "What is the weather in London and how much is 100 USD in EUR?"
 ```
-Open your browser at `http://localhost:8000` to interact with `currency_agent` and `travel_agent`.
 
 ---
 
@@ -253,10 +247,10 @@ gcloud run services update currency-agent \
 
 ### Step 3: Deploy Travel Agent
 
-Deploy `travel-agent` connected to `CURRENCY_AGENT_URL`, then set its own `AGENT_URL`:
+Deploy `travel-agent` connected to `CURRENCY_AGENT_URL`:
 
 ```bash
-# 1. Deploy Travel Agent connected to Currency Agent
+# 1. Deploy Travel Agent (with ADK Web UI) connected to Currency Agent
 gcloud run deploy travel-agent \
   --source travel_agent \
   --region $REGION \
@@ -266,12 +260,17 @@ gcloud run deploy travel-agent \
 # 2. Capture its assigned Cloud Run URL
 TRAVEL_AGENT_URL=$(gcloud run services describe travel-agent --region $REGION --format='value(status.url)')
 echo "Travel Agent URL: $TRAVEL_AGENT_URL"
-
-# 3. Update AGENT_URL so Travel Agent advertises its public HTTPS endpoint in its Agent Card
-gcloud run services update travel-agent \
-  --region $REGION \
-  --update-env-vars AGENT_URL="$TRAVEL_AGENT_URL"
 ```
+
+> [!TIP]
+> You can also deploy `travel_agent` using ADK's `adk deploy cloud_run` with the `--with_ui` flag:
+> ```bash
+> uv run adk deploy cloud_run travel_agent \
+>   --project $PROJECT_ID \
+>   --region $REGION \
+>   --with_ui \
+>   --env CURRENCY_AGENT_URL="$CURRENCY_AGENT_URL"
+> ```
 
 ### 🧪 Testing
 
@@ -281,48 +280,22 @@ Test the MCP server:
 MCP_SERVER_URL="$MCP_SERVER_URL" uv run python currency_mcp_server/test_server.py
 ```
 
-Test the currency agent:
+Test the currency agent (over A2A protocol):
 
 ```bash
 AGENT_URL="$CURRENCY_AGENT_URL" uv run python currency_agent/test_a2aclient.py
 ```
 
-Test the travel agent:
+Test the travel agent (Directly in Cloud Run via Web UI):
 
-```bash
-AGENT_URL="$TRAVEL_AGENT_URL" uv run python travel_agent/test_a2aclient.py
-```
-
-### 🧪 Testing with ADK Web UI
-
-You can also use the interactive ADK visual web interface (`adk web`) to test your agents against the services deployed to Cloud Run:
-
-#### 1. Test Currency Agent backed by Cloud Run MCP Server
-Point `currency_agent` to the deployed MCP server:
-```bash
-MCP_SERVER_URL="$MCP_SERVER_URL" uv run adk web currency_agent
-```
-Open `http://localhost:8000`, select `currency_agent`, and ask:
-> *"What is the exchange rate from 100 USD to EUR?"*
-
-#### 2. Test Travel Agent backed by Cloud Run Currency Agent (over A2A)
-Point `travel_agent` to the deployed Cloud Run Currency Agent:
-```bash
-CURRENCY_AGENT_URL="$CURRENCY_AGENT_URL" uv run adk web travel_agent
-```
-Open `http://localhost:8000`, select `travel_agent`, and ask:
+Simply open `$TRAVEL_AGENT_URL` in your browser! The ADK Web UI is served directly from Cloud Run:
 > *"I'm planning a trip to Tokyo. What is the weather like and how much is 500 USD in JPY?"*
 
-This tests the full multi-agent workflow in the UI:
-- In-process execution of the local `weather_agent` tool.
-- Remote A2A invocation across the internet to `currency-agent` on Cloud Run.
-- Remote MCP invocation to `currency-mcp-server` on Cloud Run.
-
-#### 3. Test Both Agents Simultaneously
-To load both agents into the Web UI dropdown while connected to Cloud Run:
-```bash
-MCP_SERVER_URL="$MCP_SERVER_URL" CURRENCY_AGENT_URL="$CURRENCY_AGENT_URL" uv run adk web
-```
+This tests the complete end-to-end multi-agent system running in Cloud Run:
+1. The **ADK Web UI** loaded from `travel-agent` on Cloud Run.
+2. In-process execution of the local `weather_agent` tool in Cloud Run.
+3. Remote A2A invocation across Cloud Run to `currency-agent`.
+4. Remote MCP invocation across Cloud Run to `currency-mcp-server`.
 
 ---
 
