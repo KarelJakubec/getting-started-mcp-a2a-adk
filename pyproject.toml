@@ -1,13 +1,23 @@
 [project]
-name = "currency-agent"
+name = "currency-agent-workspace"
 version = "0.1.0"
-description = "Currency conversion agent using ADK, MCP and A2A"
+description = "Workspace for currency agent, travel agent, and currency MCP server"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
-    "a2a-sdk==1.1.2",
-    "fastmcp==3.4.7",
-    "google-adk==2.7.1",
-    "google-genai==2.20.0",
-    "python-dotenv>=1.1.0",
+    "currency-mcp-server",
+    "currency-agent",
+    "travel-agent",
+]
+
+[tool.uv.sources]
+currency-mcp-server = { workspace = true }
+currency-agent = { workspace = true }
+travel-agent = { workspace = true }
+
+[tool.uv.workspace]
+members = [
+    "currency_mcp_server",
+    "currency_agent",
+    "travel_agent",
 ]

@@ -1,24 +1,23 @@
-# 💵💱💶 Currency Agent (A2A + ADK + MCP)
+# Getting Started with MCP & A2A with ADK
 
-[![Open In Codelab][codelab-badge]][codelab]
-[![Python](https://img.shields.io/badge/Python-3.x-blue.svg)](https://www.python.org/)
-[![Framework](https://img.shields.io/badge/Framework-ADK-4285F4.svg?logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAhGVYSWZNTQAqAAAACAAFARIAAwAAAAEAAQAAARoABQAAAAEAAABKARsABQAAAAEAAABSASgAAwAAAAEAAgAAh2kABAAAAAEAAABaAAAAAAAAAEgAAAABAAAASAAAAAEAA6ABAAMAAAABAAEAAKACAAQAAAABAAAADqADAAQAAAABAAAADgAAAABOylT5AAAACXBIWXMAAAsTAAALEwEAmpwYAAABWWlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iWE1QIENvcmUgNi4wLjAiPgogICA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPgogICAgICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgICAgICAgICB4bWxuczp0aWZmPSJodHRwOi8vbnMuYWRvYmUuY29tL3RpZmYvMS4wLyI+CiAgICAgICAgIDx0aWZmOk9yaWVudGF0aW9uPjE8L3RpZmY6T3JpZW50YXRpb24+CiAgICAgIDwvcmRmOkRlc2NyaXB0aW9uPgogICA8L3JkZjpSREY+CjwveDp4bXBtZXRhPgoZXuEHAAACRUlEQVQoFXVSS2gTQRj+Z3aziUlF1ISkRqqpVpCaixgkkEOaUGktBopuRQXxKF68pIdCpSsYH4gWxINHT8ZmVUR7MaRND4pUFBFfB7GXqt1iAlGS5rn7O7NpFg/6HeZ/zPfN/PMxAOtQFKSd/L8RFYtDOEmWUVBVovM8fgHDDc+iv+I9VxcgAAhdEtUbP16dTL80uRlZUMdUnXREPBb3/7pDm65g1f3iS9094QRjOwBZWwO09REQ3++kD86qY6DLTAydEWOXy8lYqpzjp/4LB+4fzYVmjiXNPTYyVRRi8IIgRijqk4eua65YqnJLzqDA+wPXijdOALpbzocTaHRFeA+IYliPZaVGCD2cHfdVCJRT6lj7zS1dupoGUhCrsREgVc0Ucm1UQXFBIa3IlVJvU5ceiQTmNyPmddR9DbAZur28Wt1xJi4YjiFq2Eeen7q3FM1HGY2DGQPM1dM3C/5izZ6sGdA9Jzm1YAOc2xzfNj3bNfUJ9t2dhj74DRkQgBlk6vhSy+49b8zBG1wBD69xD4wiQI+Zg/dIHUL97Twq8mi9UaSfo03snSXd8HMlkbitBYbGPxyftHHS99HdW0qDkC4MhOIEFlqoALWEhuGoEVia5UQbLCdoffVdcObSV15v1EpPmfdbkWDbVdazhJQ2KwSlx7gIAfeTtz1EEv3F+MFBLqw7nVNIYNoz//oiG5+Cwj4UIpgGYR58tayQwJzLy8kcODxs53E5HN7AI4fy12WW2Nxhy0e5X+rk7Ia286yBMvtq6/gDb7bjW6TkRnEAAAAASUVORK5CYII=)](https://github.com/google/adk-python)
+[![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://www.python.org/)
+[![Framework](https://img.shields.io/badge/Framework-ADK-4285F4.svg)](https://github.com/google/adk-python)
+[![Protocol](https://img.shields.io/badge/Protocol-A2A-34A853.svg)](https://github.com/google-a2a/a2a-python)
+[![Protocol](https://img.shields.io/badge/Protocol-MCP-EA4335.svg)](https://modelcontextprotocol.io/)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 
-[codelab-badge]: https://img.shields.io/badge/Open%20In%20Codelab-blue?labelColor=grey&style=flat&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAyVBMVEX////////////////////////+8/L0oZrrTkHqQzXzlY13yKEPnVgdo2KHzqvw+fX4xMDtWk604MssqWz73NnvcWdKtYHS7eD85+ZowpayncOWapvVS0360MzD5tWW1LZxo/dChfSLaKHfR0FMhe2rY4TyiYBlm/bQ4Pz+7sD7xCPPthRJpkegwvl9q/fn8P7+9+D80VL7vASisCQsoU4spV393YHPwDm40ftNjPX7wBP95qHz9/7/++/b6P3+8tD8zUKIsvj81WJbutStAAAABnRSTlMAIKDw/zDiNY+eAAAA+klEQVR4AbzRRYICMRRF0VB5QLlrO+7uDvvfVKfSv91mnGlunDFWUDh+xJUCE4ocv+JFMZ/jD7zAFPxJYRx/4gz/uGpQKquaDsEwLdv5HrieJriAbwqB/yUII00qA7YpxcmHoKRrJAUSk2QOKLi5vdMk7x7CQ0CF9fgSPFUqlWpN09QyiG1REsugkqs3miW8cTIqHApyrTbedLq9vgzkCoMKGY4gjSdTYTY3F74M0G5VyADCckpWnbd3WG+oaAMdGt7uPj7UfvC2BC2wPIACMspvuzkCp60YPo9/+M328LKHcHiek6EmnRMMAUAw2RPMOASzHsHMSzD7AwCdmyeTDUqFKQAAAABJRU5ErkJggg==
-[codelab]: https://codelabs.developers.google.com/codelabs/currency-agent
-
-A sample agent demonstrating A2A + ADK + MCP working together. It leverages the new **Agent2Agent (A2A) Python SDK** ([`a2a-sdk`](https://github.com/google-a2a/a2a-python)) and **v1.0.0+** of Google's **Agent Development Kit (ADK)**, [`google-adk`](https://github.com/google/adk-python).
-
-Both were [announced at Google I/O 2025](https://developers.googleblog.com/en/agents-adk-agent-engine-a2a-enhancements-google-io/).
+A sample multi-agent system demonstrating **Model Context Protocol (MCP)** and 
+**Agent2Agent (A2A)** working together with **Agent Development Kit (ADK)**. 
+All services can be run completely locally or fully deployed to Google Cloud Run.
 
 ![Architecture Overview](images/architecture.png)
+
+---
 
 ## Overview
 
 The sample aims at laying out a foundation and showcasing the capabilities
-of A2A + ADK + MCP. It is a currency converter agent that can convert between different
-countries' currencies.
+of MCP + A2A + ADK.
 
 ### <img height="20" width="20" src="images/mcp-favicon.ico" alt="MCP Logo" /> Model Context Protocol (MCP)
 
@@ -26,137 +25,263 @@ countries' currencies.
 
 The MCP server in this example exposes a tool `get_exchange_rate` that can be used to get the exchange rate between two currencies such as USD and EUR. It leverages the [Frankfurter](https://www.frankfurter.dev/) API to get the currency exchange rate. Our agent uses an MCP client to invoke this tool when needed.
 
+### <img height="20" width="20" src="https://a2a-protocol.org/v0.2.5/assets/a2a-logo-white.svg" alt="A2A Logo" /> Agent2Agent (A2A)
+
+> Agent2Agent (A2A) protocol addresses a critical challenge in the AI landscape: enabling gen AI agents, built on diverse frameworks by different companies running on separate servers, to communicate and collaborate effectively - as agents, not just as tools. A2A aims to provide a common language for agents, fostering a more interconnected, powerful, and innovative AI ecosystem. - [A2A](https://github.com/a2aproject/A2A)
+
+In this sample, ADK is used to expose agents as A2A servers and also consume them
+as remote A2A agents. 
+
 ### <img height="20" width="20" src="images/adk-favicon.ico" alt="ADK Logo" /> Agent Development Kit (ADK)
 
 > ADK is a flexible and modular framework for developing and deploying AI agents. While optimized for Gemini and the Google ecosystem, ADK is model-agnostic, deployment-agnostic, and is built for compatibility with other frameworks. - [ADK](https://github.com/google/adk-python)
 
-ADK (v1.0.0) is used as the orchestration framework for creating our currency agent in this sample. It handles the conversation with the user and invokes our MCP tool when needed.
+ADK is used as the orchestration framework for creating our agents in this sample. It handles the conversation with the user and invokes our MCP tool when needed and handles the
+A2A communication for our agents.
 
-### <img height="20" width="20" src="https://a2aproject.github.io/A2A/v0.2.5/assets/a2a-logo-white.svg" alt="A2A Logo" /> Agent2Agent (A2A)
+## 🏗️ Architecture Overview
 
-> Agent2Agent (A2A) protocol addresses a critical challenge in the AI landscape: enabling gen AI agents, built on diverse frameworks by different companies running on separate servers, to communicate and collaborate effectively - as agents, not just as tools. A2A aims to provide a common language for agents, fostering a more interconnected, powerful, and innovative AI ecosystem. - [A2A](https://github.com/a2aproject/A2A)
+The system consists of 2 agents talking to each other via A2A, 1 local agent,
+and 1 MCP server:
 
-The new [A2A Python SDK](https://github.com/google-a2a/a2a-python) is used to create an A2A server that advertises and executes our ADK agent. We then run an A2A client that connects to our A2A server and invokes our ADK agent. 
+```
++-----------------------------------------------------------------------------------+
+|                                  Clients                                          |
+|                ADK Web UI  |  A2A Test Clients  |  HTTP Callers                   |
++------------------------------------------+----------------------------------------+
+                                           | (A2A Protocol / JSON-RPC)
+                                           v
++-----------------------------------------------------------------------------------+
+| travel_agent (Port 8082 / Cloud Run)                                              |
+| - Orchestrating ADK Agent exposed via A2A (to_a2a)                                |
+|                                                                                   |
+|   +--> [Local AgentTool] weather_agent (travel_agent/subagents/weather_agent.py)  |
+|        - Directly wrapped as AgentTool (no A2A network overhead)                  |
+|        - Live weather tool via wttr.in API with fallback                          |
+|   +--> [Remote AgentTool] currency_agent                                          |
+|        - Communicates over A2A protocol                                           |
++------------------------------------------+----------------------------------------+
+                                           | (A2A Protocol / JSON-RPC)
+                                           v
++-----------------------------------------------------------------------------------+
+| currency_agent (Port 8081 / Cloud Run)                                            |
+| - Specialized ADK Agent exposed via A2A (to_a2a)                                  |
+| - Consumes get_exchange_rate tool via FastMCP Streamable HTTP client              |
++------------------------------------------+----------------------------------------+
+                                           | (MCP Streamable HTTP /mcp)
+                                           v
++-----------------------------------------------------------------------------------+
+| currency_mcp_server (Port 8080 / Cloud Run)                                       |
+| - FastMCP server providing real-time exchange rates via Frankfurter API           |
++-----------------------------------------------------------------------------------+
+```
 
-## Getting Started
+### Key Components
+
+- **`currency_mcp_server/`**: A FastMCP server exposing the `get_exchange_rate` tool over Streamable HTTP (`/mcp`), backed by the public [Frankfurter API](https://api.frankfurter.dev/).
+- **`currency_agent/`**: An ADK agent connected to the MCP server. Exposed as an A2A service (`to_a2a`).
+- **`travel_agent/`**: A travel assistant ADK agent exposed as an A2A service (`to_a2a`). It coordinates between:
+  - **`weather_agent`** (in `travel_agent/subagents/`): A **local agent wrapped as an `AgentTool`**, demonstrating in-process agent tool usage without A2A network hops.
+  - **`currency_agent`**: A **remote agent wrapped as an `AgentTool`**, delegating requests over the A2A protocol.
+
+---
+
+## 📦 Dependency Management (`uv` Workspace)
+
+Project dependencies are organized as a unified **`uv` Workspace**:
+- Root `pyproject.toml` orchestrates workspace members (`currency_mcp_server`, `currency_agent`, `travel_agent`).
+- Running `uv sync` at the root automatically resolves and installs all packages for local development into a single `.venv`.
+- Each service directory has its own self-contained `pyproject.toml` and `Dockerfile` for independent Cloud Run builds.
+
+---
+
+## 🚀 Getting Started
 
 ### Prerequisites
 
 - Python 3.10+
-- Git, for cloning the repository.
+- [uv](https://docs.astral.sh/uv/getting-started/installation):
+  ```bash
+  # macOS / Linux
+  curl -LsSf https://astral.sh/uv/install.sh | sh
+  ```
+- Google Cloud SDK (`gcloud`) if deploying to Cloud Run.
 
 ### Installation
 
-1. Clone the repository:
+1. Clone repository:
+   ```bash
+   git clone https://github.com/meteatamel/currency-agent.git
+   cd currency-agent
+   ```
 
+2. Install all dependencies across the workspace:
+   ```bash
+   uv sync
+   ```
+
+3. Configure Environment Variables:
+   Create a `.env` file in the project root.
+
+   **Option A: Google AI Studio (Recommended for quick testing)**
+   ```sh
+   GOOGLE_API_KEY=<your_api_key_here>
+   GOOGLE_GENAI_USE_ENTERPRISE=FALSE
+   ```
+
+   **Option B: Gemini Enterprise / Vertex AI (Google Cloud)**
+   ```sh
+   GOOGLE_GENAI_USE_ENTERPRISE=TRUE
+   GOOGLE_CLOUD_PROJECT=<your_gcp_project_id>
+   GOOGLE_CLOUD_LOCATION=global
+   ```
+
+---
+
+## 💻 Local Execution
+
+You can run all three services concurrently in separate terminal windows:
+
+### Terminal 1: Currency MCP Server (Port 8080)
 ```bash
-git clone https://github.com/jackwotherspoon/currency-agent.git
-cd currency-agent
+uv run python currency_mcp_server/server.py
 ```
-
-2. Install [uv](https://docs.astral.sh/uv/getting-started/installation) (used to manage dependencies):
-
+*Test the MCP server:*
 ```bash
-# macOS and Linux
-curl -LsSf https://astral.sh/uv/install.sh | sh
-
-# Windows (uncomment below line)
-# powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+uv run python currency_mcp_server/test_server.py
 ```
 
-> [!NOTE]
-> You may need to restart or open a new terminal after installing `uv`.
-
-3. Configure environment variables (via `.env` file):
-
-There are two different ways to call Gemini models:
-
-- Calling the Gemini API directly using an API key created via Google AI Studio.
-- Calling Gemini models through Gemini Enterprise Agent Platform APIs on Google Cloud.
-
-> [!TIP] 
-> An API key from Google AI Studio is the quickest way to get started.
-> 
-> Existing Google Cloud users may want to use Gemini Enterprise Agent Platform.
-
-<details open>
-<summary>Gemini API Key</summary> 
-
-Get an API Key from Google AI Studio: https://aistudio.google.com/apikey
-
-Create a `.env` file by running the following (replace `<your_api_key_here>` with your API key):
-
-```sh
-echo "GOOGLE_API_KEY=<your_api_key_here>" >> .env \
-&& echo "GOOGLE_GENAI_USE_ENTERPRISE=FALSE" >> .env
-```
-
-</details>
-
-<details>
-<summary>Gemini Enterprise Agent Platform</summary>
-
-To use Gemini Enterprise Agent Platform, you will need to [create a Google Cloud project](https://developers.google.com/workspace/guides/create-project) and [enable it](https://docs.cloud.google.com/gemini-enterprise-agent-platform/machine-learning/start/cloud-environment).
-
-Authenticate and enable Gemini Enterprise Agent Platform API:
-
+### Terminal 2: Currency Agent (Port 8081)
 ```bash
-gcloud auth login
-# Replace <your_project_id> with your project ID
-gcloud config set project <your_project_id>
-gcloud services enable aiplatform.googleapis.com
+uv run python currency_agent/agent.py
 ```
-
-Create a `.env` file by running the following (replace `<your_project_id>` with your project ID):
-```sh
-echo "GOOGLE_GENAI_USE_ENTERPRISE=TRUE" >> .env \
-&& echo "GOOGLE_CLOUD_PROJECT=<your_project_id>" >> .env \
-&& echo "GOOGLE_CLOUD_LOCATION=global" >> .env
-```
-
-</details>
-
-Now you are ready for the fun to begin!
-
-## Local Deployment
-
-### MCP Server
-
-In a terminal, start the MCP Server on port 8080:
-
+*Test Currency Agent via A2A client:*
 ```bash
-uv run mcp-server/server.py
+uv run python currency_agent/test_a2aclient.py
 ```
 
-### A2A Server
-
-In a separate terminal, start the A2A Server on port 10000:
-
+### Terminal 3: Travel Agent (Port 8082)
 ```bash
-uv run uvicorn currency_agent.agent:a2a_app --host localhost --port 10000
+uv run python travel_agent/agent.py
 ```
-
-### A2A Client
-
-In a separate terminal, run the A2A Client to fetch the agent card and run 
-a query against the A2A server:
-
+*Test Travel Agent via A2A client:*
 ```bash
-uv run currency_agent/test_a2aclient.py
+uv run python travel_agent/test_a2aclient.py
 ```
+This test runs end-to-end:
+1. Queries travel and currency conversion (delegated via A2A to `currency_agent` -> `currency_mcp_server`).
+2. Queries weather forecasts (delegated to local `weather_agent` in `travel_agent/subagents/`).
 
-### ADK
-
-Test the currency and travel agent using ADK UI:
-
+### ADK Web UI
+To explore and chat with the agents using the interactive ADK visual interface:
 ```bash
 uv run adk web
 ```
+Open your browser at `http://localhost:8000` to interact with `currency_agent` and `travel_agent`.
 
-## 🤝 Contributing
+---
 
-Contributions are welcome! Please feel free to submit pull requests or open issues.
+## ☁️ Cloud Run Deployment
+
+All three components include optimized Dockerfiles and can be deployed directly from source to Cloud Run. You can use `gcloud` to automatically capture service URLs and wire them into the next steps without manual copy-pasting.
+
+### Step 1: Deploy Currency MCP Server
+
+```bash
+# Deploy MCP server
+gcloud run deploy currency-mcp-server \
+  --source currency_mcp_server \
+  --region us-central1 \
+  --allow-unauthenticated
+
+# Capture the deployed MCP server URL
+MCP_SERVER_URL=$(gcloud run services describe currency-mcp-server --region us-central1 --format='value(status.url)')/mcp
+echo "MCP Server URL: $MCP_SERVER_URL"
+```
+
+### Step 2: Deploy Currency Agent
+
+Since `currency-agent`'s public URL is only generated upon its first deployment, deploy the service first, capture its URL, and then set `AGENT_URL` via a fast configuration update:
+
+```bash
+# 1. Deploy Currency Agent with the MCP Server URL
+gcloud run deploy currency-agent \
+  --source currency_agent \
+  --region us-central1 \
+  --allow-unauthenticated \
+  --set-env-vars MCP_SERVER_URL="$MCP_SERVER_URL"
+
+# 2. Capture its assigned Cloud Run URL
+CURRENCY_AGENT_URL=$(gcloud run services describe currency-agent --region us-central1 --format='value(status.url)')
+echo "Currency Agent URL: $CURRENCY_AGENT_URL"
+
+# 3. Update AGENT_URL so the agent advertises its public HTTPS endpoint in its Agent Card
+gcloud run services update currency-agent \
+  --region us-central1 \
+  --update-env-vars AGENT_URL="$CURRENCY_AGENT_URL"
+```
+*(If using Google AI Studio API key, add `,GOOGLE_API_KEY=<KEY>` to `--set-env-vars` or use Secret Manager).*
+
+### Step 3: Deploy Travel Agent
+
+Deploy `travel-agent` connected to `CURRENCY_AGENT_URL`, then set its own `AGENT_URL`:
+
+```bash
+# 1. Deploy Travel Agent connected to Currency Agent
+gcloud run deploy travel-agent \
+  --source travel_agent \
+  --region us-central1 \
+  --allow-unauthenticated \
+  --set-env-vars CURRENCY_AGENT_URL="$CURRENCY_AGENT_URL"
+
+# 2. Capture its assigned Cloud Run URL
+TRAVEL_AGENT_URL=$(gcloud run services describe travel-agent --region us-central1 --format='value(status.url)')
+echo "Travel Agent URL: $TRAVEL_AGENT_URL"
+
+# 3. Update AGENT_URL so Travel Agent advertises its public HTTPS endpoint in its Agent Card
+gcloud run services update travel-agent \
+  --region us-central1 \
+  --update-env-vars AGENT_URL="$TRAVEL_AGENT_URL"
+```
+
+You can now test the fully deployed Travel Agent on Cloud Run directly from your local terminal over A2A:
+```bash
+AGENT_URL="$TRAVEL_AGENT_URL" uv run python travel_agent/test_a2aclient.py
+```
+
+### 🧪 Testing with ADK Web UI
+
+You can also use the interactive ADK visual web interface (`adk web`) to test your agents against the services deployed to Cloud Run:
+
+#### 1. Test Currency Agent backed by Cloud Run MCP Server
+Point `currency_agent` to the deployed MCP server:
+```bash
+MCP_SERVER_URL="$MCP_SERVER_URL" uv run adk web currency_agent
+```
+Open `http://localhost:8000`, select `currency_agent`, and ask:
+> *"What is the exchange rate from 100 USD to EUR?"*
+
+#### 2. Test Travel Agent backed by Cloud Run Currency Agent (over A2A)
+Point `travel_agent` to the deployed Cloud Run Currency Agent:
+```bash
+CURRENCY_AGENT_URL="$CURRENCY_AGENT_URL" uv run adk web travel_agent
+```
+Open `http://localhost:8000`, select `travel_agent`, and ask:
+> *"I'm planning a trip to Tokyo. What is the weather like and how much is 500 USD in JPY?"*
+
+This tests the full multi-agent workflow in the UI:
+- In-process execution of the local `weather_agent` tool.
+- Remote A2A invocation across the internet to `currency-agent` on Cloud Run.
+- Remote MCP invocation to `currency-mcp-server` on Cloud Run.
+
+#### 3. Test Both Agents Simultaneously
+To load both agents into the Web UI dropdown while connected to Cloud Run:
+```bash
+MCP_SERVER_URL="$MCP_SERVER_URL" CURRENCY_AGENT_URL="$CURRENCY_AGENT_URL" uv run adk web
+```
+
+---
 
 ## 📄 License
 
-This project is licensed under the Apache 2.0 License - see the [LICENSE file](LICENSE) for details.
+This project is licensed under the Apache 2.0 License - see the [LICENSE](LICENSE) file for details.
