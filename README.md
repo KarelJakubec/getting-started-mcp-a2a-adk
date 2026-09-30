@@ -209,6 +209,18 @@ export PROJECT_ID=<YOUR_GOOGLE_CLOUD_PROJECT_ID>
 export REGION=us-central1
 ```
 
+Enable the required Google Cloud APIs for Cloud Run, Cloud Build, Artifact Registry, and Vertex AI:
+
+```bash
+gcloud services enable run.googleapis.com \
+                       cloudbuild.googleapis.com \
+                       artifactregistry.googleapis.com \
+                       aiplatform.googleapis.com
+```
+
+> [!WARNING]
+> For simplicity in this demo, services are deployed with `--allow-unauthenticated`. In a production system, internal services should enforce authentication with `--no-allow-unauthenticated` using Cloud Run Invoker (`roles/run.invoker`) IAM roles, service accounts, or an API gateway.
+
 ### Step 1: Deploy Currency MCP Server
 
 ```bash
