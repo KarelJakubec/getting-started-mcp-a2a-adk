@@ -12,3 +12,6 @@ dependencies = [
     "httpx>=0.28.1",
     "sse-starlette>=3.0.0",
 ]
+
+[tool.setuptools]
+py-modules = []
